@@ -1,0 +1,182 @@
+{
+  "address": "21Lin11EzStXChNQVqg3U9NTfLMse1YDeBuXz4q85qBw",
+  "metadata": {
+    "name": "staking_program",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "SOL Staking Program with 100x Multiplier Returns"
+  },
+  "instructions": [
+    {
+      "name": "stake",
+      "discriminator": [206, 176, 202, 18, 200, 209, 179, 108],
+      "accounts": [
+        {
+          "name": "user_stake",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [117, 115, 101, 114, 45, 115, 116, 97, 107, 101]
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              }
+            ]
+          }
+        },
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "claim_rewards",
+      "discriminator": [4, 144, 132, 71, 116, 23, 151, 80],
+      "accounts": [
+        {
+          "name": "user_stake",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [117, 115, 101, 114, 45, 115, 116, 97, 107, 101]
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              }
+            ]
+          },
+          "relations": ["user"]
+        },
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "emergency_unstake",
+      "discriminator": [156, 45, 210, 12, 158, 98, 247, 93],
+      "accounts": [
+        {
+          "name": "user_stake",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [117, 115, 101, 114, 45, 115, 116, 97, 107, 101]
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              }
+            ]
+          },
+          "relations": ["user"]
+        },
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    }
+  ],
+  "accounts": [
+    {
+      "name": "UserStake",
+      "discriminator": [102, 53, 163, 107, 9, 138, 87, 153]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "InvalidAmount",
+      "msg": "Invalid stake amount - minimum 1 SOL required"
+    },
+    {
+      "code": 6001,
+      "name": "AlreadyClaimed",
+      "msg": "Rewards already claimed"
+    },
+    {
+      "code": 6002,
+      "name": "NotUnlockedYet",
+      "msg": "Staking period not yet complete"
+    },
+    {
+      "code": 6003,
+      "name": "Unauthorized",
+      "msg": "Unauthorized - you don't own this stake"
+    },
+    {
+      "code": 6004,
+      "name": "Overflow",
+      "msg": "Mathematical overflow occurred"
+    },
+    {
+      "code": 6005,
+      "name": "AlreadyStaked",
+      "msg": "User already has an active stake"
+    }
+  ],
+  "types": [
+    {
+      "name": "UserStake",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "user",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "start_time",
+            "type": "i64"
+          },
+          {
+            "name": "end_time",
+            "type": "i64"
+          },
+          {
+            "name": "claimed",
+            "type": "bool"
+          }
+        ]
+      }
+    }
+  ]
+}
